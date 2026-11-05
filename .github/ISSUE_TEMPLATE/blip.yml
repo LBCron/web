@@ -1,0 +1,50 @@
+name: Blip nuevo para el radar
+description: Propón una técnica, framework, herramienta o modelo para el radar (si no estás en Discord)
+title: "Radar: "
+labels: [radar]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Lo ideal es abrir un hilo en el foro **#radar** de Discord, donde se vota.
+        Si no estás en Discord, usa este formulario y lo llevaremos al foro.
+        Cómo funciona: https://agenticstack.cl/radar/como-funciona
+  - type: input
+    id: nombre
+    attributes:
+      label: Nombre
+    validations:
+      required: true
+  - type: dropdown
+    id: cuadrante
+    attributes:
+      label: Cuadrante
+      options:
+        - Técnicas y patrones
+        - Frameworks y SDKs de agentes
+        - Herramientas y protocolos
+        - Modelos y plataformas
+    validations:
+      required: true
+  - type: dropdown
+    id: anillo
+    attributes:
+      label: Anillo que propones
+      options:
+        - 🟢 Adoptar
+        - 🔵 Probar
+        - 🟡 Evaluar
+        - 🔴 Esperar
+    validations:
+      required: true
+  - type: textarea
+    id: justificacion
+    attributes:
+      label: Justificación
+      description: ¿Dónde lo usaste, en qué contexto y con qué resultado? ¿Por qué ese anillo?
+    validations:
+      required: true
+  - type: input
+    id: enlaces
+    attributes:
+      label: Enlaces (sitio oficial, repo, hilo de Discord)

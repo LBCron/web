@@ -1,0 +1,7 @@
+# Owners de la organización revisan contenido y datos del radar.
+# Si se crea un team (p. ej. @agentic-stack-cl/maintainers), reemplazar los handles por el team.
+/src/content/   @sebmaldo @qnelo
+/src/data/      @sebmaldo @qnelo
+/public/brand/  @sebmaldo @qnelo
+/.github/       @sebmaldo @qnelo
+/.claude/       @sebmaldo @qnelo

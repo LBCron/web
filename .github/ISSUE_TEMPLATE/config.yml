@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Conversar en la comunidad
+    url: https://agenticstack.cl/comunidad
+    about: Preguntas generales y conversación van en Discord o en Discussions.
+  - name: Discussions
+    url: https://github.com/agentic-stack-cl/web/discussions
+    about: Ideas y preguntas sobre el sitio.

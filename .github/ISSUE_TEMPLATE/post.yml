@@ -1,0 +1,38 @@
+name: Post nuevo
+description: Propón un post para el blog
+title: "Post: "
+labels: [post]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ¡Gracias por querer escribir! Cuéntanos la idea; no hace falta tener el texto listo.
+        Guía: [CONTRIBUTING.md](https://github.com/agentic-stack-cl/web/blob/main/CONTRIBUTING.md#proponer-un-post)
+  - type: input
+    id: titulo
+    attributes:
+      label: Título tentativo
+    validations:
+      required: true
+  - type: textarea
+    id: resumen
+    attributes:
+      label: ¿De qué trata?
+      description: 2–5 frases. ¿Qué problema, experiencia o idea? ¿Qué se lleva quien lo lea?
+    validations:
+      required: true
+  - type: input
+    id: etiquetas
+    attributes:
+      label: Etiquetas sugeridas
+      placeholder: mcp, claude-code, evals
+  - type: dropdown
+    id: estado
+    attributes:
+      label: ¿Cómo lo vas a escribir?
+      options:
+        - Lo escribo yo y abro el PR
+        - Necesito ayuda para darle forma
+        - Solo es una idea, que lo tome alguien
+    validations:
+      required: true
