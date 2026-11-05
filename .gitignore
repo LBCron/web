@@ -1,0 +1,24 @@
+# dependencias y builds
+node_modules/
+dist/
+.astro/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# entorno y secretos
+.env
+.env.*
+!.env.example
+
+# Claude Code: archivos personales (los compartidos sí se versionan)
+.claude/settings.local.json
+CLAUDE.local.md
+
+# sistema
+.DS_Store
+*.log

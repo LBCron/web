@@ -1,0 +1,20 @@
+Licencia del contenido / Content license
+========================================
+
+El contenido editorial de este repositorio está bajo la licencia
+Creative Commons Atribución-CompartirIgual 4.0 Internacional (CC BY-SA 4.0):
+https://creativecommons.org/licenses/by-sa/4.0/deed.es
+
+Aplica a:
+
+- src/content/   (posts del blog, autores y páginas en Markdown/MDX)
+- src/data/      (datos del radar tecnológico, p. ej. radar.json)
+
+Cada post pertenece a sus autores, que lo publican bajo esta licencia al
+abrir el pull request. Al reutilizarlo, cita al autor, enlaza el original en
+https://agenticstack.cl y comparte las obras derivadas bajo la misma licencia.
+
+El código fuente (todo lo demás) está bajo la licencia MIT: ver LICENSE.
+
+La identidad visual (public/brand/: logo, logotipo y favicon) es de
+The Agentic Stack y no está cubierta por ninguna de las dos licencias.
