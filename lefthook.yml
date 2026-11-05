@@ -1,0 +1,29 @@
+# Git hooks compartidos (personas y agentes por igual). Se instalan con `npm install`.
+# Saltarlos en una emergencia: LEFTHOOK=0 git commit ...
+pre-commit:
+  parallel: true
+  commands:
+    prettier:
+      glob: "*.{astro,ts,js,mjs,json,md,mdx,css,yml,yaml}"
+      run: npx prettier --write --ignore-unknown {staged_files}
+      stage_fixed: true
+    eslint:
+      glob: "*.{astro,ts,js,mjs}"
+      run: npx eslint --max-warnings 0 {staged_files}
+    ruff:
+      glob: "*.py"
+      run: uvx ruff format {staged_files} && uvx ruff check --fix {staged_files}
+      stage_fixed: true
+    radar:
+      glob: "src/data/radar.json"
+      run: python3 scripts/radar/validate.py src/data/radar.json
+
+pre-push:
+  commands:
+    check:
+      run: npm run check
+    build:
+      run: npm run build
+    pytest:
+      glob: "scripts/radar/**"
+      run: npm run test:py
