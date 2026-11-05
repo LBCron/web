@@ -1,0 +1,30 @@
+---
+import { BRAND } from "@/lib/brand";
+import { SITE } from "@/config";
+---
+
+{BRAND.logoHorizontal ? (
+  <>
+    <img
+      src={BRAND.logoHorizontal}
+      alt={SITE.name}
+      class:list={["h-8 w-auto", BRAND.logoHorizontalWhite && "dark:hidden"]}
+      width="180"
+      height="32"
+    />
+    {BRAND.logoHorizontalWhite && (
+      <img
+        src={BRAND.logoHorizontalWhite}
+        alt={SITE.name}
+        class="hidden h-8 w-auto dark:block"
+        width="180"
+        height="32"
+      />
+    )}
+  </>
+) : (
+  <span class="flex items-center gap-2 text-lg font-bold tracking-tight text-brand-800 dark:text-white">
+    <span class="inline-block size-3 rounded-full bg-accent-500" aria-hidden="true" />
+    {SITE.name}
+  </span>
+)}

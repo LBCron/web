@@ -1,0 +1,63 @@
+---
+import { GISCUS, COMMENT_GUIDE_SLUG } from "@/config";
+import { getEntry } from "astro:content";
+
+const guide = await getEntry("blog", COMMENT_GUIDE_SLUG);
+const showGuide = guide && (import.meta.env.DEV || !guide.data.draft);
+---
+
+<section aria-labelledby="comentarios" class="mt-16 border-t border-slate-200 pt-10 dark:border-brand-900">
+  <h2 id="comentarios" class="text-2xl font-bold text-brand-900 dark:text-white">
+    Comentarios
+  </h2>
+  <p class="mt-2 text-sm text-slate-600 dark:text-slate-400">
+    Los comentarios usan tu cuenta de GitHub (vía{" "}
+    <a class="link" href="https://giscus.app/es">
+      giscus
+    </a>
+    ) y quedan guardados en las Discussions del repositorio.
+    {showGuide && (
+      <>
+        ¿Primera vez?{" "}
+        <a class="link" href={`/blog/${COMMENT_GUIDE_SLUG}`}>
+          Cómo crear tu cuenta de GitHub y comentar
+        </a>
+        .
+      </>
+    )}
+  </p>
+  <div class="giscus mt-6"></div>
+  <script is:inline define:vars={{ cfg: GISCUS }} data-astro-rerun>
+    (() => {
+      const theme = () => (document.documentElement.classList.contains("dark") ? "dark" : "light");
+      const s = document.createElement("script");
+      s.src = "https://giscus.app/client.js";
+      s.async = true;
+      s.crossOrigin = "anonymous";
+      const attrs = {
+        repo: cfg.repo,
+        "repo-id": cfg.repoId,
+        category: cfg.category,
+        "category-id": cfg.categoryId,
+        mapping: cfg.mapping,
+        strict: "1",
+        "reactions-enabled": "1",
+        "emit-metadata": "0",
+        "input-position": "top",
+        lang: cfg.lang,
+        loading: "lazy",
+        theme: theme(),
+      };
+      for (const [k, v] of Object.entries(attrs)) s.setAttribute(`data-${k}`, v);
+      document.querySelector(".giscus").after(s);
+      window.addEventListener("themechange", () => {
+        const frame = document.querySelector("iframe.giscus-frame");
+        frame?.contentWindow?.postMessage(
+          { giscus: { setConfig: { theme: theme() } } },
+          "https://giscus.app",
+        );
+      });
+    })();
+  </script>
+  <noscript>Activa JavaScript para ver y escribir comentarios.</noscript>
+</section>

@@ -1,0 +1,61 @@
+---
+import { SITE } from "@/config";
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-24 border-t border-slate-200 py-10 text-sm dark:border-brand-900">
+  <div class="container-page flex flex-col gap-6 text-slate-600 sm:flex-row sm:justify-between dark:text-slate-400">
+    <div class="space-y-2">
+      <p class="font-semibold text-brand-800 dark:text-white">{SITE.name}</p>
+      <p>Comunidad chilena de desarrollo de software agéntico.</p>
+      <p>
+        Código{" "}
+        <a class="link" href={`${SITE.repo}/blob/main/LICENSE`}>
+          MIT
+        </a>{" "}
+        · Contenido{" "}
+        <a class="link" href="https://creativecommons.org/licenses/by-sa/4.0/deed.es" rel="license">
+          CC BY-SA 4.0
+        </a>
+      </p>
+    </div>
+    <nav aria-label="Pie de página">
+      <ul class="grid grid-cols-2 gap-x-8 gap-y-2">
+        <li>
+          <a class="hover:underline" href="/radar/como-funciona">
+            Cómo funciona el radar
+          </a>
+        </li>
+        <li>
+          <a class="hover:underline" href="/rss.xml">
+            RSS
+          </a>
+        </li>
+        <li>
+          <a class="hover:underline" href="/comunidad#reglas">
+            Reglas
+          </a>
+        </li>
+        <li>
+          <a class="hover:underline" href={SITE.repo}>
+            GitHub
+          </a>
+        </li>
+        <li>
+          <a class="hover:underline" href={`${SITE.repo}/blob/main/CONTRIBUTING.md`}>
+            Contribuir
+          </a>
+        </li>
+        <li>
+          <a class="hover:underline" href="/sitemap-index.xml">
+            Mapa del sitio
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <p class="container-page mt-6 text-xs text-slate-500 dark:text-slate-400">
+    © {year}
+    {SITE.name} y sus autores.
+  </p>
+</footer>

@@ -17,7 +17,7 @@ Lee primero `.claude/rules/radar.md` (esquema, anillos, cuadrantes y proceso).
 3. **Cada blip nuevo o movido**:
    - ¿Está en el cuadrante correcto? (técnica vs. framework vs. herramienta/protocolo vs. modelo/plataforma)
    - ¿El anillo es defendible? Adoptar exige uso real en producción por miembros; ante la duda, un anillo más afuera.
-   - ¿La descripción explica *por qué* está en ese anillo, en ≤ 280 caracteres, sin marketing?
+   - ¿La descripción explica _por qué_ está en ese anillo, en ≤ 280 caracteres, sin marketing?
    - ¿`moved` y `date` son consistentes con el cambio? (`2` si es nuevo, `1`/`-1` si cambió de anillo).
    - ¿Hay duplicados o solapamientos (mismo concepto con otro nombre)?
    - `status: "votado"` solo si hubo votación en el foro (enlace en `discussion`). Si no, `propuesta`.

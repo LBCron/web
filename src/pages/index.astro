@@ -1,0 +1,160 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PostCard from "@/components/PostCard.astro";
+import { SITE, joinHref } from "@/config";
+import { getPosts } from "@/lib/blog";
+import { getCollection } from "astro:content";
+import { RINGS } from "@/lib/radar";
+
+const posts = (await getPosts()).slice(0, 3);
+const blips = await getCollection("radar");
+const byRing = RINGS.map((r) => ({ ...r, count: blips.filter((b) => b.data.ring === r.id).length }));
+
+const pillars = [
+  {
+    title: "Conversamos",
+    body: "Un Discord con foro e hilos para compartir lo que funciona (y lo que no) al construir con agentes: herramientas, flujos de trabajo, costos, errores.",
+  },
+  {
+    title: "Mantenemos un radar",
+    body: "Votamos en comunidad qué técnicas, frameworks, protocolos y modelos adoptar, probar, evaluar o dejar en espera.",
+  },
+  {
+    title: "Escribimos",
+    body: "Un blog abierto donde cualquier miembro puede publicar aprendizajes, guías y experimentos, con revisión entre pares.",
+  },
+];
+---
+
+<BaseLayout>
+  <section class="relative overflow-hidden bg-brand-800 text-white dark:bg-brand-950">
+    <div
+      class="pointer-events-none absolute -top-24 -right-24 size-96 rounded-full bg-accent-500/25 blur-3xl"
+      aria-hidden="true"
+    ></div>
+    <div class="container-page relative py-20 sm:py-28">
+      <p class="text-sm font-semibold tracking-wide text-accent-300 uppercase">Comunidad chilena</p>
+      <h1 class="mt-3 max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl">
+        Desarrollo de software agéntico, en comunidad.
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg text-brand-100">
+        {SITE.name} reúne a desarrolladoras y desarrolladores que construyen con agentes de IA: compartimos
+        prácticas, votamos un radar tecnológico y escribimos lo que aprendemos.
+      </p>
+      <div class="mt-10 flex flex-wrap gap-3">
+        <a
+          href={joinHref}
+          class="btn bg-accent-500 text-brand-950 hover:bg-accent-400 focus-visible:outline-white"
+        >
+          Únete al Discord
+        </a>
+        <a href="/radar" class="btn border border-white/40 text-white hover:bg-white/10">
+          Ver el radar
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-page py-16" aria-labelledby="que-es">
+    <h2 id="que-es" class="text-2xl font-bold text-brand-900 dark:text-white">
+      Qué hacemos
+    </h2>
+    <div class="mt-8 grid gap-6 md:grid-cols-3">
+      {pillars.map((p) => (
+        <div class="card">
+          <h3 class="text-lg font-semibold text-brand-900 dark:text-white">{p.title}</h3>
+          <p class="mt-2 text-slate-700 dark:text-slate-300">{p.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="bg-brand-50 py-16 dark:bg-brand-950/70" aria-labelledby="radar-teaser">
+    <div class="container-page grid items-center gap-10 md:grid-cols-2">
+      <div>
+        <p class="eyebrow">Radar tecnológico</p>
+        <h2 id="radar-teaser" class="mt-2 text-2xl font-bold text-brand-900 dark:text-white">
+          Qué estamos usando para construir con agentes
+        </h2>
+        <p class="mt-4 text-slate-700 dark:text-slate-300">
+          Inspirado en el radar de ThoughtWorks: cada ítem se discute en un hilo del foro y la comunidad vota
+          su anillo con reacciones. El sitio se actualiza solo.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="/radar" class="btn-primary">
+            Explorar el radar
+          </a>
+          <a href="/radar/como-funciona" class="btn-secondary">
+            Cómo funciona
+          </a>
+        </div>
+      </div>
+      <ul class="grid grid-cols-2 gap-4">
+        {byRing.map((r) => (
+          <li class="card">
+            <p class="text-3xl font-bold text-brand-900 dark:text-white">{r.count}</p>
+            <p class="mt-1 font-medium">
+              <span aria-hidden="true">{r.emoji}</span> {r.name}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {posts.length > 0 && (
+    <section class="container-page py-16" aria-labelledby="ultimos-posts">
+      <div class="flex items-baseline justify-between gap-4">
+        <h2 id="ultimos-posts" class="text-2xl font-bold text-brand-900 dark:text-white">
+          Últimos posts
+        </h2>
+        <a href="/blog" class="link text-sm">
+          Ver todos
+        </a>
+      </div>
+      <div class="mt-8 grid gap-6 md:grid-cols-3">
+        {posts.map((post) => (
+          <PostCard post={post} headingLevel="h3" />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="container-page py-16" aria-labelledby="como-unirse">
+    <h2 id="como-unirse" class="text-2xl font-bold text-brand-900 dark:text-white">
+      Cómo unirte
+    </h2>
+    <ol class="mt-8 grid gap-6 md:grid-cols-3">
+      <li class="card">
+        <p class="text-sm font-bold text-accent-700 dark:text-accent-400">Paso 1</p>
+        <h3 class="mt-1 font-semibold text-brand-900 dark:text-white">Entra al Discord</h3>
+        <p class="mt-2 text-slate-700 dark:text-slate-300">
+          Preséntate en el canal de bienvenida y cuéntanos en qué estás trabajando.
+        </p>
+      </li>
+      <li class="card">
+        <p class="text-sm font-bold text-accent-700 dark:text-accent-400">Paso 2</p>
+        <h3 class="mt-1 font-semibold text-brand-900 dark:text-white">Participa en el foro</h3>
+        <p class="mt-2 text-slate-700 dark:text-slate-300">
+          Abre o comenta hilos y vota los ítems del radar con reacciones.
+        </p>
+      </li>
+      <li class="card">
+        <p class="text-sm font-bold text-accent-700 dark:text-accent-400">Paso 3</p>
+        <h3 class="mt-1 font-semibold text-brand-900 dark:text-white">Contribuye</h3>
+        <p class="mt-2 text-slate-700 dark:text-slate-300">
+          Escribe un post o mejora este sitio: todo es abierto en{" "}
+          <a class="link" href={SITE.repo}>
+            GitHub
+          </a>
+          .
+        </p>
+      </li>
+    </ol>
+    <p class="mt-8">
+      <a href="/comunidad" class="link">
+        Reglas y formas de contribuir
+      </a>
+    </p>
+  </section>
+</BaseLayout>

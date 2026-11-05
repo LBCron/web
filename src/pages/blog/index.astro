@@ -1,0 +1,74 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import PostCard from "@/components/PostCard.astro";
+import { getPosts, getTags } from "@/lib/blog";
+import { SITE } from "@/config";
+
+const posts = await getPosts();
+const tags = [...(await getTags()).entries()];
+---
+
+<BaseLayout
+  title="Blog"
+  description="Aprendizajes, guías y experimentos de la comunidad The Agentic Stack sobre desarrollo de software con agentes."
+>
+  <PageHeader
+    eyebrow="Blog"
+    title="Lo que estamos aprendiendo"
+    lead="Escrito por la comunidad. Cualquier miembro puede proponer un post."
+  >
+    <p class="mt-4 text-sm">
+      <a class="link" href="/rss.xml">
+        Suscríbete por RSS
+      </a>
+      <span aria-hidden="true"> · </span>
+      <a class="link" href={`${SITE.repo}/blob/main/CONTRIBUTING.md#proponer-un-post`}>
+        Escribe un post
+      </a>
+    </p>
+  </PageHeader>
+
+  <div class="container-page grid gap-10 lg:grid-cols-[1fr_14rem]">
+    <section aria-label="Posts">
+      {posts.length === 0 ? (
+        <p class="card text-slate-700 dark:text-slate-300">
+          Todavía no hay posts publicados. ¿Escribes el primero?
+        </p>
+      ) : (
+        <div class="grid gap-6">
+          {posts.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      )}
+    </section>
+    {tags.length > 0 && (
+      <aside aria-labelledby="etiquetas-h">
+        <h2
+          id="etiquetas-h"
+          class="text-sm font-semibold tracking-wide text-slate-600 uppercase dark:text-slate-400"
+        >
+          Etiquetas
+        </h2>
+        <ul class="mt-3 flex flex-wrap gap-2">
+          {tags.map(([tag, n]) => (
+            <li>
+              <a
+                href={`/blog/etiquetas/${tag}`}
+                class="rounded-full bg-brand-50 px-2.5 py-1 text-sm text-brand-800 hover:bg-brand-100 dark:bg-brand-900 dark:text-brand-100 dark:hover:bg-brand-800"
+              >
+                #{tag} <span class="text-brand-600 dark:text-brand-300">({n})</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="mt-4 text-sm">
+          <a class="link" href="/blog/etiquetas">
+            Todas las etiquetas
+          </a>
+        </p>
+      </aside>
+    )}
+  </div>
+</BaseLayout>

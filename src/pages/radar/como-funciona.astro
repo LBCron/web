@@ -1,0 +1,121 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import { QUADRANTS, RINGS } from "@/lib/radar";
+import { SITE, joinHref } from "@/config";
+
+const quadrantHelp: Record<string, string> = {
+  tecnicas:
+    "Formas de trabajar: prácticas, patrones de diseño de agentes, procesos de revisión, evaluación y seguridad.",
+  frameworks: "Bibliotecas y SDKs para construir agentes: orquestación, memoria, herramientas, multiagente.",
+  herramientas:
+    "Productos y protocolos que usamos en el día a día: agentes de código, MCP, A2A, observabilidad.",
+  modelos:
+    "Modelos de lenguaje y las plataformas para usarlos: proveedores, gateways, modelos abiertos, hosting.",
+};
+---
+
+<BaseLayout
+  title="Cómo funciona el radar"
+  description="Anillos, cuadrantes y el proceso de votación en el foro de Discord que actualiza el radar de The Agentic Stack."
+>
+  <PageHeader
+    eyebrow="Radar tecnológico"
+    title="Cómo funciona el radar"
+    lead="El radar resume la experiencia de la comunidad. No es un ranking de popularidad: cada anillo refleja qué recomendaríamos a alguien que empieza un proyecto hoy."
+  />
+
+  <div class="container-page max-w-3xl space-y-14">
+    <section aria-labelledby="anillos">
+      <h2 id="anillos" class="text-2xl font-bold text-brand-900 dark:text-white">
+        Los cuatro anillos
+      </h2>
+      <dl class="mt-6 space-y-4">
+        {RINGS.map((r) => (
+          <div class="card">
+            <dt class="font-semibold text-brand-900 dark:text-white">
+              <span aria-hidden="true">{r.emoji}</span> {r.name}
+            </dt>
+            <dd class="mt-1 text-slate-700 dark:text-slate-300">{r.summary}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <section aria-labelledby="cuadrantes">
+      <h2 id="cuadrantes" class="text-2xl font-bold text-brand-900 dark:text-white">
+        Los cuatro cuadrantes
+      </h2>
+      <dl class="mt-6 grid gap-4 sm:grid-cols-2">
+        {QUADRANTS.map((q) => (
+          <div class="card">
+            <dt class="font-semibold text-brand-900 dark:text-white">{q.name}</dt>
+            <dd class="mt-1 text-slate-700 dark:text-slate-300">{quadrantHelp[q.id]}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <section aria-labelledby="votacion">
+      <h2 id="votacion" class="text-2xl font-bold text-brand-900 dark:text-white">
+        Cómo se vota
+      </h2>
+      <div class="prose-site mt-4">
+        <p>
+          El radar se alimenta del canal de foro <strong>#radar</strong> en nuestro Discord:
+        </p>
+        <ol>
+          <li>
+            <strong>Un hilo = un ítem.</strong> Para proponer algo, abre un hilo con el nombre de la técnica,
+            herramienta o modelo. En el primer mensaje cuenta qué es, cómo lo usaste y en qué anillo crees que
+            va.
+          </li>
+          <li>
+            <strong>La etiqueta del hilo es el cuadrante.</strong> Elige una de las cuatro etiquetas del foro
+            (Técnicas y patrones, Frameworks y SDKs, Herramientas y protocolos, Modelos y plataformas).
+          </li>
+          <li>
+            <strong>Las reacciones al primer mensaje son los votos.</strong> Cada persona reacciona con el
+            anillo que recomienda: 🟢 Adoptar, 🔵 Probar, 🟡 Evaluar o 🔴 Esperar. Si cambias de opinión,
+            cambia tu reacción.
+          </li>
+          <li>
+            <strong>Quórum.</strong> Un ítem entra al radar (o cambia de anillo) cuando suma al menos el
+            mínimo de votos definido por la comunidad (hoy, 5). Gana el anillo con más votos; si hay empate,
+            queda el anillo más conservador (el más externo).
+          </li>
+          <li>
+            <strong>Sincronización diaria.</strong> Un proceso automático lee el foro una vez al día, calcula
+            los anillos y abre un pull request en GitHub con los cambios. Una persona del equipo lo revisa y
+            lo aprueba; al mergearse, el sitio se actualiza.
+          </li>
+          <li>
+            <strong>Resumen semanal.</strong> Cuando hay movimientos, publicamos un resumen en Discord.
+          </li>
+        </ol>
+        <p>
+          Los ítems marcados como <strong>Propuesta</strong> todavía no tienen votación con quórum: son el
+          punto de partida que sembramos para que el radar no empezara vacío.
+        </p>
+        <h3>¿Y si no estoy en Discord?</h3>
+        <p>
+          Puedes proponer un ítem con la{" "}
+          <a href={`${SITE.repo}/issues/new?template=blip.yml`}>plantilla de blip en GitHub</a>. Lo llevaremos
+          al foro para votarlo. Y si quieres <a href={joinHref}>unirte al Discord</a>, mejor aún.
+        </p>
+        <h3>¿Quién decide al final?</h3>
+        <p>
+          La comunidad vota y las personas que mantienen el repositorio revisan que el cambio cumpla las
+          reglas (quórum, cuadrante correcto, descripción clara). No cambiamos un resultado votado sin
+          explicarlo en el hilo.
+        </p>
+      </div>
+    </section>
+
+    <p>
+      <a href="/radar" class="btn-primary">
+        Volver al radar
+      </a>
+    </p>
+  </div>
+</BaseLayout>

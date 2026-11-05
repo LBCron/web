@@ -14,35 +14,35 @@ Este repo nace **agéntico**: además del código del sitio, trae la configuraci
 
 ## Qué hay en `.claude/` y alrededores
 
-| Ruta                     | Qué es                                                                       | Se carga                                       |
-| ------------------------ | ---------------------------------------------------------------------------- | ---------------------------------------------- |
-| `CLAUDE.md`              | Memoria del proyecto: stack, comandos, convenciones, límites. < 200 líneas.  | Siempre, al iniciar la sesión                  |
-| `.claude/rules/*.md`     | Reglas con `paths:`: solo entran al contexto cuando se tocan esos archivos.  | Al leer/editar `src/content/**` o el radar     |
-| `.claude/agents/*.md`    | Subagentes especializados con sus propias herramientas y modelo.             | Cuando Claude (o tú) los invoca                |
-| `.claude/skills/*/`      | Procedimientos de varios pasos. Cada uno es también un comando `/nombre`.    | Cuando la tarea calza con la descripción, o `/nombre` |
-| `.claude/hooks/*.sh`     | Scripts que Claude Code ejecuta automáticamente tras editar archivos.        | En cada `Edit`/`Write`                         |
-| `.claude/settings.json`  | Permisos, hooks y plugins del equipo. Versionado.                            | Siempre (tras confiar en la carpeta)           |
-| `.claude/settings.local.json`, `CLAUDE.local.md` | Tus ajustes personales. **No se versionan** (`.gitignore`). | Solo en tu máquina                     |
-| `lefthook.yml`           | Git hooks para todos (personas y agentes).                                   | En `git commit` y `git push`                   |
+| Ruta                                             | Qué es                                                                      | Se carga                                              |
+| ------------------------------------------------ | --------------------------------------------------------------------------- | ----------------------------------------------------- |
+| `CLAUDE.md`                                      | Memoria del proyecto: stack, comandos, convenciones, límites. < 200 líneas. | Siempre, al iniciar la sesión                         |
+| `.claude/rules/*.md`                             | Reglas con `paths:`: solo entran al contexto cuando se tocan esos archivos. | Al leer/editar `src/content/**` o el radar            |
+| `.claude/agents/*.md`                            | Subagentes especializados con sus propias herramientas y modelo.            | Cuando Claude (o tú) los invoca                       |
+| `.claude/skills/*/`                              | Procedimientos de varios pasos. Cada uno es también un comando `/nombre`.   | Cuando la tarea calza con la descripción, o `/nombre` |
+| `.claude/hooks/*.sh`                             | Scripts que Claude Code ejecuta automáticamente tras editar archivos.       | En cada `Edit`/`Write`                                |
+| `.claude/settings.json`                          | Permisos, hooks y plugins del equipo. Versionado.                           | Siempre (tras confiar en la carpeta)                  |
+| `.claude/settings.local.json`, `CLAUDE.local.md` | Tus ajustes personales. **No se versionan** (`.gitignore`).                 | Solo en tu máquina                                    |
+| `lefthook.yml`                                   | Git hooks para todos (personas y agentes).                                  | En `git commit` y `git push`                          |
 
 ## Subagentes: cuándo usar cada uno
 
 Claude los usa solo cuando corresponde, pero puedes pedirlos explícitamente: _"usa el content-editor para revisar mi post"_.
 
-| Agente            | Úsalo cuando…                                                                            | Hace                                                                    | Modelo |
-| ----------------- | ---------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ------ |
+| Agente            | Úsalo cuando…                                                                            | Hace                                                                                        | Modelo |
+| ----------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- | ------ |
 | `content-editor`  | Escribiste o editaste un post o una ficha de autor                                       | Ortografía, tono, front-matter, etiquetas, enlaces. Corrige lo objetivo y sugiere el resto. | sonnet |
-| `radar-curator`   | Cambia `src/data/radar.json`, alguien propone un blip, o llega el PR del sync de Discord | Valida esquema, cuadrante, anillo, `moved`, coherencia y votación.      | sonnet |
-| `web-reviewer`    | Tocaste páginas, componentes o estilos                                                    | Accesibilidad AA, modo oscuro, SEO, rendimiento, responsive. Solo reporta. | sonnet |
-| `release-checker` | Antes de abrir o aprobar un PR                                                            | `check`, validación del radar, build, enlaces rotos, tests. Veredicto final. | haiku  |
+| `radar-curator`   | Cambia `src/data/radar.json`, alguien propone un blip, o llega el PR del sync de Discord | Valida esquema, cuadrante, anillo, `moved`, coherencia y votación.                          | sonnet |
+| `web-reviewer`    | Tocaste páginas, componentes o estilos                                                   | Accesibilidad AA, modo oscuro, SEO, rendimiento, responsive. Solo reporta.                  | sonnet |
+| `release-checker` | Antes de abrir o aprobar un PR                                                           | `check`, validación del radar, build, enlaces rotos, tests. Veredicto final.                | haiku  |
 
 ## Skills (comandos)
 
-| Comando                 | Para qué                                                                                       |
-| ----------------------- | ---------------------------------------------------------------------------------------------- |
-| `/new-post <título>`    | Crea rama, ficha de autor si falta y el archivo del post con front-matter válido y `draft: true`. |
-| `/radar-blip <nombre>`  | Agrega o mueve un blip con justificación, valida y prepara el texto del PR.                    |
-| `/weekly-digest [desde]` | Redacta el resumen de cambios del radar para Discord (no lo publica). Solo se invoca a mano.  |
+| Comando                  | Para qué                                                                                          |
+| ------------------------ | ------------------------------------------------------------------------------------------------- |
+| `/new-post <título>`     | Crea rama, ficha de autor si falta y el archivo del post con front-matter válido y `draft: true`. |
+| `/radar-blip <nombre>`   | Agrega o mueve un blip con justificación, valida y prepara el texto del PR.                       |
+| `/weekly-digest [desde]` | Redacta el resumen de cambios del radar para Discord (no lo publica). Solo se invoca a mano.      |
 
 ## Hooks: dos capas
 
@@ -64,15 +64,15 @@ Por qué así: la documentación de Claude Code cubre sus propios hooks, no los 
 
 Del marketplace oficial `claude-plugins-official` ([anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official)), declarados en `enabledPlugins`:
 
-| Plugin                 | Por qué                                                                                     |
-| ---------------------- | ------------------------------------------------------------------------------------------- |
-| `frontend-design`      | Guía de diseño para componentes y páginas con calidad de producción.                        |
-| `modern-web-guidance`  | Buenas prácticas web actuales (accesibilidad, rendimiento, SEO), mantenido por Google Chrome. |
+| Plugin                 | Por qué                                                                                                |
+| ---------------------- | ------------------------------------------------------------------------------------------------------ |
+| `frontend-design`      | Guía de diseño para componentes y páginas con calidad de producción.                                   |
+| `modern-web-guidance`  | Buenas prácticas web actuales (accesibilidad, rendimiento, SEO), mantenido por Google Chrome.          |
 | `playwright`           | Navegador controlable: el `web-reviewer` lo usa para ver páginas en móvil/escritorio y en modo oscuro. |
-| `code-review`          | Revisión de PRs con varios agentes y filtro de falsos positivos (`/code-review`).           |
-| `commit-commands`      | Flujo de commit, push y PR desde Claude.                                                     |
-| `claude-md-management` | Auditar y mantener `CLAUDE.md` al día con lo aprendido en cada sesión.                      |
-| `skill-creator`        | Para que la comunidad cree y mejore skills nuevas para este repo.                          |
+| `code-review`          | Revisión de PRs con varios agentes y filtro de falsos positivos (`/code-review`).                      |
+| `commit-commands`      | Flujo de commit, push y PR desde Claude.                                                               |
+| `claude-md-management` | Auditar y mantener `CLAUDE.md` al día con lo aprendido en cada sesión.                                 |
+| `skill-creator`        | Para que la comunidad cree y mejore skills nuevas para este repo.                                      |
 
 Evaluados y **no** incluidos por ahora:
 

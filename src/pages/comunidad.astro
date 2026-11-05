@@ -1,0 +1,135 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import { SITE } from "@/config";
+
+const rules = [
+  [
+    "Respeto ante todo",
+    "Trata a todas las personas con amabilidad. No toleramos acoso, discriminación ni ataques personales.",
+  ],
+  [
+    "Comparte con contexto",
+    "Al mostrar una herramienta o resultado, cuenta qué intentabas, qué funcionó y qué no. Los fracasos también enseñan.",
+  ],
+  [
+    "Sin spam ni autopromoción vacía",
+    "Puedes compartir tu trabajo si aporta a la conversación. Ofertas comerciales solo en el canal destinado a eso.",
+  ],
+  [
+    "Cuida los datos",
+    "No publiques credenciales, datos personales ni información confidencial de tu empleador o clientes, tampoco en capturas o prompts.",
+  ],
+  [
+    "Cita y atribuye",
+    "Si compartes contenido de otra persona, enlaza la fuente. El contenido del blog se publica bajo CC BY-SA 4.0.",
+  ],
+  [
+    "Un hilo, un tema",
+    "En el foro, abre un hilo por tema o ítem del radar para que la votación y la conversación queden ordenadas.",
+  ],
+];
+---
+
+<BaseLayout
+  title="Comunidad"
+  description="Reglas de la comunidad The Agentic Stack, cómo unirte y cómo contribuir al blog, al radar y al sitio."
+>
+  <PageHeader
+    eyebrow="Comunidad"
+    title="Una comunidad abierta para construir con agentes"
+    lead="Somos desarrolladoras y desarrolladores en Chile (y alrededores) aprendiendo juntos a diseñar, construir y operar software con agentes de IA."
+  />
+
+  <div class="container-page space-y-16">
+    <section id="unete" aria-labelledby="unete-h" class="scroll-mt-24">
+      <h2 id="unete-h" class="text-2xl font-bold text-brand-900 dark:text-white">
+        Únete
+      </h2>
+      <div class="prose-site mt-4">
+        {SITE.discordInvite ? (
+          <p>
+            La conversación vive en Discord.{" "}
+            <a href={SITE.discordInvite}>Entra con este enlace de invitación</a>, lee las reglas y preséntate.
+          </p>
+        ) : (
+          <p>
+            La conversación vive en Discord. Por ahora entramos por invitación: pídela a alguien de la
+            comunidad o abre una conversación en las{" "}
+            <a href={`${SITE.repo}/discussions`}>Discussions del repositorio</a> y te enviamos el enlace.
+          </p>
+        )}
+      </div>
+    </section>
+
+    <section id="reglas" aria-labelledby="reglas-h" class="scroll-mt-24">
+      <h2 id="reglas-h" class="text-2xl font-bold text-brand-900 dark:text-white">
+        Reglas
+      </h2>
+      <ol class="mt-6 grid gap-4 md:grid-cols-2">
+        {rules.map(([title, body], i) => (
+          <li class="card">
+            <h3 class="font-semibold text-brand-900 dark:text-white">
+              <span class="mr-2 text-accent-700 dark:text-accent-400">{i + 1}.</span>
+              {title}
+            </h3>
+            <p class="mt-2 text-slate-700 dark:text-slate-300">{body}</p>
+          </li>
+        ))}
+      </ol>
+      <p class="mt-6 text-slate-700 dark:text-slate-300">
+        Estas reglas resumen nuestro{" "}
+        <a class="link" href={`${SITE.repo}/blob/main/CODE_OF_CONDUCT.md`}>
+          código de conducta
+        </a>
+        , que aplica en Discord, GitHub y eventos.
+      </p>
+    </section>
+
+    <section id="contribuir" aria-labelledby="contribuir-h" class="scroll-mt-24">
+      <h2 id="contribuir-h" class="text-2xl font-bold text-brand-900 dark:text-white">
+        Cómo contribuir
+      </h2>
+      <div class="mt-6 grid gap-6 md:grid-cols-3">
+        <div class="card">
+          <h3 class="font-semibold text-brand-900 dark:text-white">Escribe un post</h3>
+          <p class="mt-2 text-slate-700 dark:text-slate-300">
+            Propón un tema con un{" "}
+            <a class="link" href={`${SITE.repo}/issues/new?template=post.yml`}>
+              issue
+            </a>{" "}
+            o abre directamente un pull request con tu post en Markdown.
+          </p>
+        </div>
+        <div class="card">
+          <h3 class="font-semibold text-brand-900 dark:text-white">Propón un ítem del radar</h3>
+          <p class="mt-2 text-slate-700 dark:text-slate-300">
+            Abre un hilo en el foro del radar en Discord. Si no estás en Discord, usa la{" "}
+            <a class="link" href={`${SITE.repo}/issues/new?template=blip.yml`}>
+              plantilla de blip
+            </a>
+            .{" "}
+            <a class="link" href="/radar/como-funciona">
+              Así funciona
+            </a>
+            .
+          </p>
+        </div>
+        <div class="card">
+          <h3 class="font-semibold text-brand-900 dark:text-white">Mejora el sitio</h3>
+          <p class="mt-2 text-slate-700 dark:text-slate-300">
+            Revisa los{" "}
+            <a class="link" href={`${SITE.repo}/labels/good%20first%20issue`}>
+              issues para empezar
+            </a>{" "}
+            y la
+            <a class="link" href={`${SITE.repo}/blob/main/CONTRIBUTING.md`}>
+              guía de contribución
+            </a>
+            . El repo viene listo para trabajar con Claude Code.
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

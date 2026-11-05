@@ -1,0 +1,84 @@
+---
+import "@fontsource-variable/inter";
+import "@/styles/global.css";
+import { SITE } from "@/config";
+import { BRAND } from "@/lib/brand";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import ThemeScript from "@/components/ThemeScript.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  publishedTime?: Date;
+  modifiedTime?: Date;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = SITE.description,
+  image = BRAND.og ?? undefined,
+  type = "website",
+  publishedTime,
+  modifiedTime,
+  noindex = false,
+} = Astro.props;
+
+const fullTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} — desarrollo de software agéntico`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = image ? new URL(image, Astro.site).href : undefined;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <ThemeScript />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#0F2A6B" />
+
+    {BRAND.faviconSvg && <link rel="icon" type="image/svg+xml" href={BRAND.faviconSvg} />}
+    {BRAND.favicon32 && <link rel="icon" type="image/png" sizes="32x32" href={BRAND.favicon32} />}
+    {BRAND.og && <link rel="apple-touch-icon" href={BRAND.og} />}
+
+    <link rel="alternate" type="application/rss+xml" title={`Blog de ${SITE.name}`} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={title ?? SITE.name} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && <meta property="og:image:alt" content={`Logo de ${SITE.name}`} />}
+    {publishedTime && <meta property="article:published_time" content={publishedTime.toISOString()} />}
+    {modifiedTime && <meta property="article:modified_time" content={modifiedTime.toISOString()} />}
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title ?? SITE.name} />
+    <meta name="twitter:description" content={description} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    <slot name="head" />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <a
+      href="#contenido"
+      class="sr-only z-50 rounded-md bg-accent-500 px-4 py-2 font-semibold text-brand-950 focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+    >
+      Saltar al contenido
+    </a>
+    <Header />
+    <main id="contenido" class="flex-1" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

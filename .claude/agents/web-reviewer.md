@@ -13,6 +13,7 @@ Revisa solo lo que cambió (`git diff main --stat` y luego los archivos) más su
 ## Lista de revisión
 
 **Accesibilidad (WCAG 2.2 AA)**
+
 - Contraste ≥ 4.5:1 texto normal, ≥ 3:1 texto grande e íconos, en **ambos** modos. Ojo: el naranja `#F97316` sobre blanco no alcanza AA para texto normal; úsalo para acentos, no para párrafos ni enlaces pequeños sobre fondo claro (usa `accent-700` o similar).
 - `lang="es"`, un `h1` por página, headings en orden, landmarks (`header`, `nav`, `main`, `footer`).
 - Foco visible, orden de tabulación lógico, `aria-label` en botones solo-ícono, `alt` en imágenes, enlaces con texto descriptivo.

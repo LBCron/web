@@ -28,5 +28,4 @@ allowed-tools: Read, Bash(python3 scripts/radar/digest.py *), Bash(git log *)
 Vota y comenta en el foro #radar · https://agenticstack.cl/radar
 ```
 
-   Emojis de anillo: 🟢 Adoptar · 🔵 Probar · 🟡 Evaluar · 🔴 Esperar. Omite secciones vacías.
-4. Muestra el texto listo para copiar. **No lo publiques**: la publicación automática la hace el workflow `radar-sync` por webhook; publicar a mano es decisión de quien lo pide.
+Emojis de anillo: 🟢 Adoptar · 🔵 Probar · 🟡 Evaluar · 🔴 Esperar. Omite secciones vacías. 4. Muestra el texto listo para copiar. **No lo publiques**: la publicación automática la hace el workflow `radar-sync` por webhook; publicar a mano es decisión de quien lo pide.

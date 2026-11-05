@@ -1,0 +1,109 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Giscus from "@/components/Giscus.astro";
+import { getEntries, render } from "astro:content";
+import { getPosts, formatDate, isoDate, type Post } from "@/lib/blog";
+import { Image } from "astro:assets";
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props as { post: Post };
+const { Content } = await render(post);
+const authors = await getEntries(post.data.authors);
+const { title, description, pubDate, updatedDate, tags, cover, coverAlt, draft } = post.data;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  type="article"
+  publishedTime={pubDate}
+  modifiedTime={updatedDate}
+  image={cover?.src}
+  noindex={draft}
+>
+  <article class="container-page max-w-3xl pt-12 sm:pt-16">
+    <header>
+      <p class="text-sm text-slate-600 dark:text-slate-400">
+        <a class="link" href="/blog">
+          Blog
+        </a>
+        <span aria-hidden="true"> / </span>
+        <time datetime={isoDate(pubDate)}>{formatDate(pubDate)}</time>
+        {updatedDate && (
+          <>
+            {" "}
+            · actualizado <time datetime={isoDate(updatedDate)}>{formatDate(updatedDate)}</time>
+          </>
+        )}
+      </p>
+      {draft && (
+        <p class="mt-3 rounded-lg bg-accent-100 px-3 py-2 text-sm font-medium text-accent-900">
+          Borrador: solo visible en desarrollo.
+        </p>
+      )}
+      <h1 class="mt-3 text-3xl font-bold tracking-tight text-brand-900 sm:text-4xl dark:text-white">
+        {title}
+      </h1>
+      <p class="mt-4 text-lg text-slate-600 dark:text-slate-300">{description}</p>
+      <ul class="mt-6 flex flex-wrap gap-4" aria-label="Autores">
+        {authors.map(({ id, data }) => (
+          <li class="flex items-center gap-3">
+            <img
+              src={`https://github.com/${data.github}.png?size=80`}
+              alt=""
+              width="40"
+              height="40"
+              loading="lazy"
+              class="size-10 rounded-full bg-slate-200"
+            />
+            <span class="text-sm">
+              <a class="font-semibold text-brand-900 hover:underline dark:text-white" href={`/autores/${id}`}>
+                {data.name}
+              </a>
+              <br />
+              <a
+                class="text-slate-600 hover:underline dark:text-slate-400"
+                href={`https://github.com/${data.github}`}
+              >
+                @{data.github}
+              </a>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </header>
+
+    {cover && (
+      <Image
+        src={cover}
+        alt={coverAlt ?? ""}
+        class="mt-8 w-full rounded-xl"
+        widths={[720, 1440]}
+        sizes="(min-width: 768px) 720px, 100vw"
+      />
+    )}
+
+    <div class="prose-site mt-10">
+      <Content />
+    </div>
+
+    <ul class="mt-10 flex flex-wrap gap-2" aria-label="Etiquetas">
+      {tags.map((tag) => (
+        <li>
+          <a
+            href={`/blog/etiquetas/${tag}`}
+            class="rounded-full bg-brand-50 px-2.5 py-1 text-sm text-brand-800 hover:bg-brand-100 dark:bg-brand-900 dark:text-brand-100 dark:hover:bg-brand-800"
+          >
+            #{tag}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <Giscus />
+  </article>
+</BaseLayout>

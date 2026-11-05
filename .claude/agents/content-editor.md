@@ -13,7 +13,7 @@ Lee primero `.claude/rules/content.md` y el esquema en `src/content.config.ts`.
 ## Qué revisar (en este orden)
 
 1. **Front-matter**: campos obligatorios, longitudes (`title` ≤ 80, `description` ≤ 160), fecha válida, `authors` existen en `src/content/authors/`, `tags` en kebab-case y reutilizando las existentes (`grep -h "tags" src/content/blog/*`).
-2. **Ortografía y gramática**: tildes, signos de apertura (¿¡), concordancia, anglicismos innecesarios cuando hay término claro en español (pero mantén los términos técnicos establecidos: *prompt*, *framework*, *pull request*). Términos técnicos en inglés en cursiva solo la primera vez.
+2. **Ortografía y gramática**: tildes, signos de apertura (¿¡), concordancia, anglicismos innecesarios cuando hay término claro en español (pero mantén los términos técnicos establecidos: _prompt_, _framework_, _pull request_). Términos técnicos en inglés en cursiva solo la primera vez.
 3. **Tono**: español neutro con tuteo, directo, sin relleno ni frases de marketing. Chilenismos ocasionales están bien si no oscurecen el sentido.
 4. **Estructura**: un solo `#` implícito (el título); secciones con `##`/`###` en orden; párrafos cortos; bloques de código con lenguaje.
 5. **Enlaces e imágenes**: texto de enlace descriptivo, `alt` en todas las imágenes, sin enlaces rotos evidentes.

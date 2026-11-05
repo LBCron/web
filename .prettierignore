@@ -1,0 +1,7 @@
+dist/
+.astro/
+node_modules/
+public/vendor/
+package-lock.json
+scripts/radar/fixtures/
+*.py

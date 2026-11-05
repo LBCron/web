@@ -1,0 +1,220 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import { getCollection } from "astro:content";
+import { QUADRANTS, RINGS, MOVED_LABEL, ring as ringOf } from "@/lib/radar";
+import { numberBlips, radarQuadrants, toRadarEntries } from "@/lib/radar-layout";
+import { formatDate } from "@/lib/blog";
+import radarData from "@/data/radar.json";
+
+const blips = await getCollection("radar");
+const numbers = numberBlips(blips);
+const proposals = blips.filter((b) => b.data.status === "propuesta").length;
+const updated = formatDate(new Date(radarData.updated));
+
+const radarConfig = {
+  quadrants: radarQuadrants.map((q) => ({ name: q.name })),
+  rings: RINGS.map((r) => ({ name: r.name.toUpperCase(), color: r.color })),
+  entries: toRadarEntries(blips),
+};
+
+const movedIcon: Record<number, string> = { 2: "★", 1: "▲", 0: "", [-1]: "▼" };
+---
+
+<BaseLayout
+  title="Radar tecnológico"
+  description="Radar de The Agentic Stack: técnicas, frameworks, herramientas y modelos para desarrollo de software agéntico, votados por la comunidad."
+>
+  <PageHeader
+    eyebrow="Radar tecnológico"
+    title="Radar de desarrollo agéntico"
+    lead="Qué técnicas, frameworks, herramientas y modelos recomendamos adoptar, probar, evaluar o dejar en espera. Lo vota la comunidad en el foro de Discord."
+  >
+    <p class="mt-4 text-sm text-slate-600 dark:text-slate-400">
+      Actualizado el {updated} · {blips.length} ítems{" · "}
+      <a class="link" href="/radar/como-funciona">
+        Cómo funciona
+      </a>
+    </p>
+    {proposals > 0 && (
+      <p class="mt-4 max-w-2xl rounded-lg border border-accent-300 bg-accent-50 px-4 py-3 text-sm text-accent-950 dark:border-accent-700 dark:bg-accent-950 dark:text-accent-100">
+        <strong>
+          {proposals} de {blips.length} ítems son propuestas
+        </strong>{" "}
+        que todavía no pasan por votación en el foro. Su anillo puede cambiar.
+      </p>
+    )}
+  </PageHeader>
+
+  <section class="container-page" aria-labelledby="grafico-h">
+    <h2 id="grafico-h" class="sr-only">
+      Gráfico del radar
+    </h2>
+    <figure class="card overflow-hidden p-2 sm:p-4">
+      <svg id="radar" class="radar-svg mx-auto block h-auto w-full" aria-labelledby="radar-desc">
+        <desc id="radar-desc">
+          Gráfico del radar con {blips.length} ítems en cuatro cuadrantes y cuatro anillos. Los mismos datos
+          están en la tabla a continuación.
+        </desc>
+      </svg>
+      <figcaption class="mt-2 px-2 text-sm text-slate-600 dark:text-slate-400">
+        <span aria-hidden="true">★ nuevo · ▲ subió · ▼ bajó · ● sin cambios.</span> Pasa el cursor sobre un
+        punto para ver su nombre; haz clic para ir a su ficha. El detalle completo está en la tabla.
+      </figcaption>
+      <noscript>
+        <p class="p-4">El gráfico necesita JavaScript. La tabla de abajo tiene toda la información.</p>
+      </noscript>
+    </figure>
+  </section>
+
+  <section class="container-page mt-12 space-y-12" aria-labelledby="tabla-h">
+    <h2 id="tabla-h" class="text-2xl font-bold text-brand-900 dark:text-white">
+      Todos los ítems
+    </h2>
+    <ul class="flex flex-wrap gap-x-6 gap-y-2 text-sm" aria-label="Anillos">
+      {RINGS.map((r) => (
+        <li>
+          <span aria-hidden="true">{r.emoji}</span> <strong>{r.name}</strong>: {r.summary}
+        </li>
+      ))}
+    </ul>
+    {QUADRANTS.map((q) => {
+      const items = blips
+        .filter((b) => b.data.quadrant === q.id)
+        .sort((a, b) => numbers.get(a.id)! - numbers.get(b.id)!);
+      return (
+        <section aria-labelledby={`q-${q.id}`}>
+          <h3 id={`q-${q.id}`} class="text-xl font-semibold text-brand-900 dark:text-white">
+            {q.name}
+          </h3>
+          <div class="mt-4 overflow-x-auto rounded-xl border border-slate-200 dark:border-brand-900">
+            <table class="w-full min-w-xl text-left text-sm">
+              <caption class="sr-only">Ítems del cuadrante {q.name}</caption>
+              <thead class="bg-slate-50 text-slate-700 dark:bg-brand-950 dark:text-slate-300">
+                <tr>
+                  <th scope="col" class="w-12 px-3 py-2 font-semibold">
+                    <abbr title="Número en el gráfico">N.º</abbr>
+                  </th>
+                  <th scope="col" class="px-3 py-2 font-semibold">
+                    Ítem
+                  </th>
+                  <th scope="col" class="w-32 px-3 py-2 font-semibold">
+                    Anillo
+                  </th>
+                  <th scope="col" class="w-36 px-3 py-2 font-semibold">
+                    Estado
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200 dark:divide-brand-900">
+                {items.map((b) => {
+                  const r = ringOf(b.data.ring);
+                  return (
+                    <tr
+                      id={`blip-${b.id}`}
+                      class="scroll-mt-24 align-top target:bg-accent-50 dark:target:bg-brand-900"
+                    >
+                      <td class="px-3 py-3 font-mono text-slate-600 dark:text-slate-400">
+                        {numbers.get(b.id)}
+                      </td>
+                      <th scope="row" class="px-3 py-3 font-normal">
+                        <span class="font-semibold text-brand-900 dark:text-white">{b.data.name}</span>
+                        <p class="mt-1 text-slate-700 dark:text-slate-300">{b.data.description}</p>
+                      </th>
+                      <td class="px-3 py-3 whitespace-nowrap">
+                        <span aria-hidden="true">{r.emoji}</span> {r.name}
+                        {b.data.moved !== 0 && (
+                          <span class="block text-xs text-slate-600 dark:text-slate-400">
+                            <span aria-hidden="true">{movedIcon[b.data.moved]} </span>
+                            {MOVED_LABEL[b.data.moved]}
+                          </span>
+                        )}
+                      </td>
+                      <td class="px-3 py-3">
+                        {b.data.status === "propuesta" ? (
+                          <span class="rounded bg-accent-100 px-1.5 py-0.5 text-xs font-semibold text-accent-900">
+                            Propuesta
+                          </span>
+                        ) : (
+                          <span class="rounded bg-green-100 px-1.5 py-0.5 text-xs font-semibold text-green-900">
+                            Votado
+                          </span>
+                        )}
+                        {b.data.discussion && (
+                          <a class="link mt-1 block text-xs" href={b.data.discussion}>
+                            Hilo en Discord<span class="sr-only"> sobre {b.data.name}</span>
+                          </a>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      );
+    })}
+  </section>
+
+  <script is:inline src="/vendor/d3-7.9.0.min.js"></script>
+  <script is:inline src="/vendor/tech-radar/radar-0.12.js"></script>
+  <script is:inline type="application/json" id="radar-config" set:html={JSON.stringify(radarConfig)} />
+  <script is:inline>
+    (() => {
+      const base = JSON.parse(document.getElementById("radar-config").textContent);
+      const svg = document.getElementById("radar");
+      const desc = svg.querySelector("desc");
+      const darkRings = ["#22c55e", "#3b82f6", "#d97706", "#ef4444"];
+      const wide = matchMedia("(min-width: 900px)");
+
+      function draw() {
+        const dark = document.documentElement.classList.contains("dark");
+        svg.replaceChildren(desc);
+        const layout = wide.matches;
+        const width = layout ? 1540 : 850;
+        const height = layout ? 1000 : 850;
+        radar_visualization({
+          svg_id: "radar",
+          width,
+          height,
+          title: "",
+          date: "",
+          font_family: "'Inter Variable', system-ui, sans-serif",
+          print_layout: layout,
+          links_in_new_tabs: false,
+          colors: {
+            background: "transparent",
+            grid: dark ? "#23439a" : "#cbd5e1",
+            inactive: dark ? "#334155" : "#ddd",
+          },
+          quadrants: base.quadrants,
+          rings: base.rings.map((r, i) => ({ ...r, color: dark ? darkRings[i] : r.color })),
+          entries: base.entries.map((e) => ({ ...e })),
+        });
+        svg.removeAttribute("width");
+        svg.removeAttribute("height");
+        svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        for (const t of svg.querySelectorAll("text")) {
+          if (t.textContent.includes("moved up")) t.remove();
+        }
+      }
+
+      draw();
+      window.addEventListener("themechange", draw);
+      wide.addEventListener("change", draw);
+    })();
+  </script>
+</BaseLayout>
+
+<style is:global>
+  .radar-svg {
+    color: var(--color-slate-800);
+  }
+  .dark .radar-svg {
+    color: var(--color-slate-200);
+  }
+  .radar-svg text {
+    fill: currentColor;
+  }
+</style>

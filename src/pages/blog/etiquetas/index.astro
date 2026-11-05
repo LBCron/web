@@ -1,0 +1,28 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import { getTags } from "@/lib/blog";
+const tags = [...(await getTags()).entries()];
+---
+
+<BaseLayout title="Etiquetas del blog" description="Todas las etiquetas del blog de The Agentic Stack.">
+  <PageHeader eyebrow="Blog" title="Etiquetas" />
+  <div class="container-page">
+    {tags.length === 0 ? (
+      <p>Todavía no hay etiquetas.</p>
+    ) : (
+      <ul class="flex flex-wrap gap-3">
+        {tags.map(([tag, n]) => (
+          <li>
+            <a
+              href={`/blog/etiquetas/${tag}`}
+              class="rounded-full bg-brand-50 px-3 py-1.5 text-brand-800 hover:bg-brand-100 dark:bg-brand-900 dark:text-brand-100 dark:hover:bg-brand-800"
+            >
+              #{tag} <span class="text-brand-600 dark:text-brand-300">({n})</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+</BaseLayout>

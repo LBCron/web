@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  # Permite que el sync del radar dispare la CI sobre su PR (ver radar-sync.yml)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - uses: astral-sh/setup-uv@v10
+      - run: npm ci
+      - name: Validar radar.json
+        run: npm run radar:validate
+      - name: Tipos, lint y formato
+        run: npm run check
+      - name: Lint Python
+        run: npm run lint:py
+      - name: Tests del pipeline del radar
+        run: npm run test:py
+      - name: Build
+        run: npm run build
+      - name: Enlaces internos
+        run: npm run links

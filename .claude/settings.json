@@ -19,12 +19,7 @@
       "Bash(gh pr diff *)",
       "Bash(gh pr checks *)"
     ],
-    "ask": [
-      "Bash(git push *)",
-      "Bash(gh pr create *)",
-      "Bash(gh pr merge *)",
-      "Edit(public/brand/**)"
-    ],
+    "ask": ["Bash(git push *)", "Bash(gh pr create *)", "Bash(gh pr merge *)", "Edit(public/brand/**)"],
     "deny": [
       "Read(./.env)",
       "Read(./.env.*)",

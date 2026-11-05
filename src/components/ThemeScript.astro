@@ -1,0 +1,16 @@
+---
+// Se ejecuta antes de pintar para evitar el parpadeo de tema incorrecto.
+---
+
+<script is:inline>
+  (() => {
+    let stored = null;
+    try {
+      stored = localStorage.getItem("theme");
+    } catch {
+      /* almacenamiento bloqueado: usa la preferencia del sistema */
+    }
+    const dark = stored ? stored === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.classList.toggle("dark", dark);
+  })();
+</script>

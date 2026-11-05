@@ -1,0 +1,109 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Modo oscuro por clase en <html> (ver ThemeScript). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* Azul de marca: #0F2A6B = brand-800 */
+  --color-brand-50: #eef3fc;
+  --color-brand-100: #d9e3f7;
+  --color-brand-200: #b4c7ee;
+  --color-brand-300: #86a3e0;
+  --color-brand-400: #577acd;
+  --color-brand-500: #3558b5;
+  --color-brand-600: #23439a;
+  --color-brand-700: #1a367f;
+  --color-brand-800: #0f2a6b;
+  --color-brand-900: #0b2052;
+  --color-brand-950: #07153a;
+
+  /* Naranja de acento: #F97316 = accent-500.
+     Ojo con el contraste: sobre blanco usa accent-700 o más oscuro para texto. */
+  --color-accent-50: #fff7ed;
+  --color-accent-100: #ffedd5;
+  --color-accent-200: #fed7aa;
+  --color-accent-300: #fdba74;
+  --color-accent-400: #fb923c;
+  --color-accent-500: #f97316;
+  --color-accent-600: #ea580c;
+  --color-accent-700: #c2410c;
+  --color-accent-800: #9a3412;
+  --color-accent-900: #7c2d12;
+  --color-accent-950: #431407;
+
+  /* Superficies */
+  --color-surface: #ffffff;
+  --color-surface-dark: #060e24;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  body {
+    @apply bg-surface font-sans text-slate-800 antialiased dark:bg-surface-dark dark:text-slate-200;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent-500;
+  }
+  ::selection {
+    @apply bg-accent-200 text-brand-950;
+  }
+}
+
+/* Clases de componente reutilizables (Tailwind v4: @utility) */
+@utility container-page {
+  @apply mx-auto w-full max-w-5xl px-4 sm:px-6;
+}
+
+@utility link {
+  @apply font-medium text-brand-700 underline decoration-accent-500 decoration-2 underline-offset-4 hover:text-brand-900 dark:text-brand-200 dark:hover:text-white;
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors;
+}
+
+@utility btn-primary {
+  @apply btn bg-brand-800 text-white hover:bg-brand-900 dark:bg-accent-500 dark:text-brand-950 dark:hover:bg-accent-400;
+}
+
+@utility btn-secondary {
+  @apply btn border border-brand-200 text-brand-800 hover:border-brand-400 hover:bg-brand-50 dark:border-brand-700 dark:text-brand-100 dark:hover:bg-brand-900;
+}
+
+@utility card {
+  @apply rounded-xl border border-slate-200 bg-white p-5 dark:border-brand-900 dark:bg-brand-950/60;
+}
+
+@utility eyebrow {
+  @apply text-sm font-semibold tracking-wide text-accent-700 uppercase dark:text-accent-400;
+}
+
+@utility prose-site {
+  @apply prose max-w-none prose-slate dark:prose-invert prose-headings:scroll-mt-20 prose-headings:text-brand-900 dark:prose-headings:text-white prose-a:text-brand-700 prose-a:decoration-accent-500 prose-a:underline-offset-4 dark:prose-a:text-brand-200 prose-code:before:content-none prose-code:after:content-none;
+}
+
+/* Shiki con temas claro/oscuro */
+html.dark .astro-code,
+html.dark .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
