@@ -1,0 +1,110 @@
+{
+  "_comment": "Fixture con la forma de la API REST de Discord v10: GET /channels/{forum}, /guilds/{guild}/threads/active, /channels/{forum}/threads/archived/public y el primer mensaje de cada hilo. Datos inventados para pruebas.",
+  "channel": {
+    "id": "1300000000000000001",
+    "guild_id": "1200000000000000001",
+    "type": 15,
+    "name": "radar",
+    "available_tags": [
+      { "id": "1400000000000000001", "name": "Técnicas y patrones" },
+      { "id": "1400000000000000002", "name": "Frameworks y SDKs" },
+      { "id": "1400000000000000003", "name": "Herramientas y protocolos" },
+      { "id": "1400000000000000004", "name": "Modelos y plataformas" },
+      { "id": "1400000000000000005", "name": "Pregunta" }
+    ]
+  },
+  "active_threads": {
+    "threads": [
+      {
+        "id": "1500000000000000001",
+        "parent_id": "1300000000000000001",
+        "name": "Model Context Protocol (MCP)",
+        "applied_tags": ["1400000000000000003"]
+      },
+      {
+        "id": "1500000000000000002",
+        "parent_id": "1300000000000000001",
+        "name": "Agent2Agent (A2A)",
+        "applied_tags": ["1400000000000000003"]
+      },
+      {
+        "id": "1500000000000000003",
+        "parent_id": "1300000000000000001",
+        "name": "Vibe coding sin revisión",
+        "applied_tags": ["1400000000000000001"]
+      },
+      {
+        "id": "1500000000000000004",
+        "parent_id": "1300000000000000001",
+        "name": "DSPy",
+        "applied_tags": ["1400000000000000002"]
+      },
+      {
+        "id": "1500000000000000006",
+        "parent_id": "1300000000000000001",
+        "name": "¿Qué usan para evals?",
+        "applied_tags": ["1400000000000000005"]
+      },
+      {
+        "id": "1599999999999999999",
+        "parent_id": "1300000000000000099",
+        "name": "Hilo de otro canal",
+        "applied_tags": []
+      }
+    ]
+  },
+  "archived_threads": {
+    "has_more": false,
+    "threads": [
+      {
+        "id": "1500000000000000005",
+        "parent_id": "1300000000000000001",
+        "name": "LangGraph",
+        "applied_tags": ["1400000000000000002"],
+        "thread_metadata": { "archived": true, "archive_timestamp": "2026-10-20T12:00:00+00:00" }
+      }
+    ]
+  },
+  "messages": {
+    "1500000000000000001": {
+      "id": "1500000000000000001",
+      "content": "Ya lo usamos en varios proyectos.",
+      "reactions": [
+        { "count": 6, "emoji": { "id": null, "name": "🟢" } },
+        { "count": 2, "emoji": { "id": null, "name": "🔵" } },
+        { "count": 3, "emoji": { "id": null, "name": "🔥" } }
+      ]
+    },
+    "1500000000000000002": {
+      "id": "1500000000000000002",
+      "content": "Lo probamos en un piloto.",
+      "reactions": [
+        { "count": 5, "emoji": { "id": null, "name": "🔵" } },
+        { "count": 1, "emoji": { "id": null, "name": "🟡" } }
+      ]
+    },
+    "1500000000000000003": {
+      "id": "1500000000000000003",
+      "content": "Aceptar código generado sin leerlo ni testearlo.\n\nEn proyectos personales puede servir, pero en equipos genera deuda y fallas de seguridad difíciles de rastrear.",
+      "reactions": [{ "count": 7, "emoji": { "id": null, "name": "🔴" } }]
+    },
+    "1500000000000000004": {
+      "id": "1500000000000000004",
+      "content": "Programar prompts en vez de escribirlos.",
+      "reactions": [{ "count": 2, "emoji": { "id": null, "name": "🟡" } }]
+    },
+    "1500000000000000005": {
+      "id": "1500000000000000005",
+      "content": "Opiniones divididas.",
+      "reactions": [
+        { "count": 3, "emoji": { "id": null, "name": "🔵" } },
+        { "count": 3, "emoji": { "id": null, "name": "🟡" } }
+      ]
+    },
+    "1500000000000000006": {
+      "id": "1500000000000000006",
+      "content": "Pregunta abierta.",
+      "reactions": [{ "count": 9, "emoji": { "id": null, "name": "🟢" } }]
+    }
+  }
+}

@@ -1,0 +1,91 @@
+name: Radar ↔ Discord
+
+# Lee el foro #radar de Discord, recalcula anillos por votación y abre un PR
+# con los cambios en src/data/radar.json. Nunca escribe directo en main.
+#
+# Secrets esperados (Settings → Secrets and variables → Actions):
+#   DISCORD_TOKEN        token del bot (permisos: View Channel + Read Message History en el foro)
+#   FORUM_CHANNEL_ID     id del canal de foro #radar
+#   DISCORD_WEBHOOK_URL  webhook del canal donde se anuncian los cambios (opcional)
+# Variable opcional: RADAR_QUORUM (por defecto 5)
+
+on:
+  schedule:
+    - cron: "0 11 * * *" # todos los días, 08:00 en Chile (UTC-3)
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Solo mostrar cambios, sin abrir PR ni notificar"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: radar-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: ¿Hay credenciales?
+        id: guard
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          FORUM_CHANNEL_ID: ${{ secrets.FORUM_CHANNEL_ID }}
+        run: |
+          if [ -z "$DISCORD_TOKEN" ] || [ -z "$FORUM_CHANNEL_ID" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Faltan DISCORD_TOKEN o FORUM_CHANNEL_ID: se omite el sync. Ver docs/RADAR-SYNC.md"
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Sincronizar con el foro
+        if: steps.guard.outputs.configured == 'true'
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          FORUM_CHANNEL_ID: ${{ secrets.FORUM_CHANNEL_ID }}
+          RADAR_QUORUM: ${{ vars.RADAR_QUORUM || '5' }}
+        run: |
+          python3 scripts/radar/sync.py \
+            ${{ inputs.dry_run && '--dry-run' || '' }} \
+            --changes-out "$RUNNER_TEMP/changes.json" \
+            --pr-body-out "$RUNNER_TEMP/pr-body.md"
+          cat "$RUNNER_TEMP/pr-body.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Abrir o actualizar PR
+        id: cpr
+        if: steps.guard.outputs.configured == 'true' && !inputs.dry_run
+        uses: peter-evans/create-pull-request@v8
+        with:
+          branch: radar/sync
+          delete-branch: true
+          commit-message: "feat(radar): sincroniza votos del foro de Discord"
+          title: "radar: sincronización con el foro de Discord"
+          body-path: ${{ runner.temp }}/pr-body.md
+          labels: radar
+          add-paths: src/data/radar.json
+
+      # Los PR creados con GITHUB_TOKEN no disparan workflows `pull_request`;
+      # workflow_dispatch sí, y su check queda asociado al commit del PR.
+      - name: Ejecutar CI sobre el PR
+        if: steps.cpr.outputs.pull-request-head-sha != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run ci.yml --ref radar/sync
+
+      - name: Anunciar en Discord
+        if: steps.cpr.outputs.pull-request-operation == 'created' || steps.cpr.outputs.pull-request-operation == 'updated'
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          python3 scripts/radar/notify.py \
+            --changes "$RUNNER_TEMP/changes.json" \
+            --pr-url "${{ steps.cpr.outputs.pull-request-url }}"
